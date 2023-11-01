@@ -57,6 +57,7 @@ class FlashCardApp(tk.Tk):
             self.canvas.itemconfig(self.language_text, text="English")
             self.canvas.itemconfig(self.word_text, text=self.chosen_word["English"])
 
+    # TODO: Need some way to end the application if the dictionary is empty.
     def get_new_card(self):
         self.index, self.chosen_word = random.choice(list(self.words_dict.items()))
         self.canvas.itemconfig(self.card_image, image=self.card_front_image)
