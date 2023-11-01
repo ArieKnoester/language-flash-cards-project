@@ -21,10 +21,20 @@ class FlashCardApp(tk.Tk):
 
         # Buttons
         self.wrong_button_image = tk.PhotoImage(file="images/wrong.png")
-        self.wrong_button = tk.Button(image=self.wrong_button_image, relief="groove", highlightthickness=0)
+        self.wrong_button = tk.Button(
+            image=self.wrong_button_image,
+            relief="groove",
+            highlightthickness=0,
+            command=lambda: self.user_clicks_button(button=self.wrong_button)
+        )
         self.wrong_button.grid(row=1, column=0)
         self.right_button_image = tk.PhotoImage(file="images/right.png")
-        self.right_button = tk.Button(image=self.right_button_image, relief="groove", highlightthickness=0)
+        self.right_button = tk.Button(
+            image=self.right_button_image,
+            relief="groove",
+            highlightthickness=0,
+            command=lambda: self.user_clicks_button(button=self.right_button)
+        )
         self.right_button.grid(row=1, column=1)
         self.timer = tk.NONE
         self.display_flash_card(DISPLAY_CARD_FRONT_SECONDS)
@@ -36,3 +46,16 @@ class FlashCardApp(tk.Tk):
             self.canvas.itemconfig(self.card_image, image=self.card_back_image)
             self.canvas.itemconfig(self.language_text, text="English")
             self.canvas.itemconfig(self.word_text, text="English word")
+
+    def get_next_card(self):
+        self.canvas.itemconfig(self.card_image, image=self.card_front_image)
+        self.canvas.itemconfig(self.language_text, text="French")
+        self.canvas.itemconfig(self.word_text, text="French word")
+
+    def user_clicks_button(self, *, button):
+        if button == self.right_button:
+            print("Check pressed. Remove the card.")
+        elif button == self.wrong_button:
+            print("Cross pressed. Do not remove the card.")
+        self.get_next_card()
+        self.display_flash_card(DISPLAY_CARD_FRONT_SECONDS)
