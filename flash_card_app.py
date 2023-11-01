@@ -30,22 +30,22 @@ class FlashCardApp(tk.Tk):
         self.canvas.grid(row=0, column=0, columnspan=2)
 
         # App Buttons
-        self.wrong_button_image = tk.PhotoImage(file="images/wrong.png")
-        self.wrong_button = tk.Button(
-            image=self.wrong_button_image,
+        self.incorrect_button_image = tk.PhotoImage(file="images/wrong.png")
+        self.incorrect_button = tk.Button(
+            image=self.incorrect_button_image,
             relief="groove",
             highlightthickness=0,
-            command=lambda: self.user_clicks_button(button=self.wrong_button)
+            command=lambda: self.user_clicks_button(button=self.incorrect_button)
         )
-        self.wrong_button.grid(row=1, column=0)
-        self.right_button_image = tk.PhotoImage(file="images/right.png")
-        self.right_button = tk.Button(
-            image=self.right_button_image,
+        self.incorrect_button.grid(row=1, column=0)
+        self.correct_button_image = tk.PhotoImage(file="images/right.png")
+        self.correct_button = tk.Button(
+            image=self.correct_button_image,
             relief="groove",
             highlightthickness=0,
-            command=lambda: self.user_clicks_button(button=self.right_button)
+            command=lambda: self.user_clicks_button(button=self.correct_button)
         )
-        self.right_button.grid(row=1, column=1)
+        self.correct_button.grid(row=1, column=1)
         self.timer = tk.NONE
         self.get_new_card()
 
@@ -66,7 +66,7 @@ class FlashCardApp(tk.Tk):
 
     def user_clicks_button(self, *, button):
         # If the user clicks the 'Check' button. Remove that word from the dictionary
-        if button == self.right_button:
+        if button == self.correct_button:
             self.words_dict.pop(self.index)
 
         self.get_new_card()
