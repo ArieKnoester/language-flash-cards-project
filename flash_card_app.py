@@ -1,4 +1,6 @@
 import tkinter as tk
+import pandas
+import random
 BACKGROUND_COLOR = "#B1DDC6"
 LANGUAGE_TEXT_FONT = ("Ariel", 40, "italic")
 WORD_TEXT_FONT = ("Ariel", 60, "bold")
@@ -9,6 +11,14 @@ class FlashCardApp(tk.Tk):
 
     def __init__(self):
         super().__init__()
+
+        # Dictionary
+        words_dataframe = pandas.read_csv("data/french_words.csv")
+        self.words_dict = words_dataframe.transpose().to_dict()
+        self.random_index = 0
+        self.chosen_word = {}
+
+        # App Window
         self.title("flashy")
         self.config(padx=50, pady=20, background=BACKGROUND_COLOR)
         self.canvas = tk.Canvas(width=800, height=526, background=BACKGROUND_COLOR, highlightthickness=0)
@@ -19,7 +29,7 @@ class FlashCardApp(tk.Tk):
         self.word_text = self.canvas.create_text(400, 263, text="French word", font=WORD_TEXT_FONT)
         self.canvas.grid(row=0, column=0, columnspan=2)
 
-        # Buttons
+        # App Buttons
         self.wrong_button_image = tk.PhotoImage(file="images/wrong.png")
         self.wrong_button = tk.Button(
             image=self.wrong_button_image,
@@ -37,7 +47,7 @@ class FlashCardApp(tk.Tk):
         )
         self.right_button.grid(row=1, column=1)
         self.timer = tk.NONE
-        self.display_flash_card(DISPLAY_CARD_FRONT_SECONDS)
+        self.get_new_card()
 
     def display_flash_card(self, seconds):
         if seconds > 0:
@@ -45,17 +55,18 @@ class FlashCardApp(tk.Tk):
         else:
             self.canvas.itemconfig(self.card_image, image=self.card_back_image)
             self.canvas.itemconfig(self.language_text, text="English")
-            self.canvas.itemconfig(self.word_text, text="English word")
+            self.canvas.itemconfig(self.word_text, text=self.chosen_word["English"])
 
-    def get_next_card(self):
+    def get_new_card(self):
+        self.random_index, self.chosen_word = random.choice(list(self.words_dict.items()))
         self.canvas.itemconfig(self.card_image, image=self.card_front_image)
         self.canvas.itemconfig(self.language_text, text="French")
-        self.canvas.itemconfig(self.word_text, text="French word")
+        self.canvas.itemconfig(self.word_text, text=self.chosen_word["French"])
+        self.display_flash_card(DISPLAY_CARD_FRONT_SECONDS)
 
     def user_clicks_button(self, *, button):
         if button == self.right_button:
             print("Check pressed. Remove the card.")
         elif button == self.wrong_button:
             print("Cross pressed. Do not remove the card.")
-        self.get_next_card()
-        self.display_flash_card(DISPLAY_CARD_FRONT_SECONDS)
+        self.get_new_card()
