@@ -15,7 +15,7 @@ class FlashCardApp(tk.Tk):
         # Dictionary
         words_dataframe = pandas.read_csv("data/french_words.csv")
         self.words_dict = words_dataframe.transpose().to_dict()
-        self.random_index = 0
+        self.index = 0
         self.chosen_word = {}
 
         # App Window
@@ -58,15 +58,15 @@ class FlashCardApp(tk.Tk):
             self.canvas.itemconfig(self.word_text, text=self.chosen_word["English"])
 
     def get_new_card(self):
-        self.random_index, self.chosen_word = random.choice(list(self.words_dict.items()))
+        self.index, self.chosen_word = random.choice(list(self.words_dict.items()))
         self.canvas.itemconfig(self.card_image, image=self.card_front_image)
         self.canvas.itemconfig(self.language_text, text="French")
         self.canvas.itemconfig(self.word_text, text=self.chosen_word["French"])
         self.display_flash_card(DISPLAY_CARD_FRONT_SECONDS)
 
     def user_clicks_button(self, *, button):
+        # If the user clicks the 'Check' button. Remove that word from the dictionary
         if button == self.right_button:
-            print("Check pressed. Remove the card.")
-        elif button == self.wrong_button:
-            print("Cross pressed. Do not remove the card.")
+            self.words_dict.pop(self.index)
+
         self.get_new_card()
