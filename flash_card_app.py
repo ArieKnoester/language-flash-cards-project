@@ -13,7 +13,7 @@ class FlashCardApp(tk.Tk):
         super().__init__()
 
         # Dictionary
-        words_dataframe = pandas.read_csv("data/test_file.csv")
+        words_dataframe = pandas.read_csv("data/french_words.csv")
         self.words_dict = words_dataframe.transpose().to_dict()
         self.index = 0
         self.chosen_word = {}
