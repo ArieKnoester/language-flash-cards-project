@@ -54,20 +54,20 @@ class FlashCardApp(tk.Tk):
             self.timer = self.canvas.after(1000, self.display_flash_card, seconds - 1)
         else:
             self.canvas.itemconfig(self.card_image, image=self.card_back_image)
-            self.canvas.itemconfig(self.language_text, text="English")
-            self.canvas.itemconfig(self.word_text, text=self.chosen_word["English"])
+            self.canvas.itemconfig(self.language_text, text="English", fill="white")
+            self.canvas.itemconfig(self.word_text, text=self.chosen_word["English"], fill="white")
 
     def display_finished_text(self):
         self.canvas.itemconfig(self.card_image, image=self.card_front_image)
-        self.canvas.itemconfig(self.language_text, text="All done.")
-        self.canvas.itemconfig(self.word_text, text="Great job!")
+        self.canvas.itemconfig(self.language_text, text="All done.", fill="black")
+        self.canvas.itemconfig(self.word_text, text="Great job!", fill="black")
 
     def set_new_flash_card_data(self):
         if self.words_dict:
             self.index, self.chosen_word = random.choice(list(self.words_dict.items()))
             self.canvas.itemconfig(self.card_image, image=self.card_front_image)
-            self.canvas.itemconfig(self.language_text, text="French")
-            self.canvas.itemconfig(self.word_text, text=self.chosen_word["French"])
+            self.canvas.itemconfig(self.language_text, text="French", fill="black")
+            self.canvas.itemconfig(self.word_text, text=self.chosen_word["French"], fill="black")
             self.display_flash_card(DISPLAY_CARD_FRONT_SECONDS)
         else:
             self.display_finished_text()
