@@ -13,7 +13,7 @@ class FlashCardApp(tk.Tk):
         super().__init__()
 
         # Dictionary
-        words_dataframe = pandas.read_csv("data/french_words.csv")
+        words_dataframe = pandas.read_csv("data/test_file.csv")
         self.words_dict = words_dataframe.transpose().to_dict()
         self.index = 0
         self.chosen_word = {}
@@ -47,7 +47,7 @@ class FlashCardApp(tk.Tk):
         )
         self.correct_button.grid(row=1, column=1)
         self.timer = tk.NONE
-        self.get_new_card()
+        self.set_new_flash_card_data()
 
     def display_flash_card(self, seconds):
         if seconds > 0:
@@ -57,17 +57,24 @@ class FlashCardApp(tk.Tk):
             self.canvas.itemconfig(self.language_text, text="English")
             self.canvas.itemconfig(self.word_text, text=self.chosen_word["English"])
 
-    # TODO: Need some way to end the application if the dictionary is empty.
-    def get_new_card(self):
-        self.index, self.chosen_word = random.choice(list(self.words_dict.items()))
+    def display_finished_text(self):
         self.canvas.itemconfig(self.card_image, image=self.card_front_image)
-        self.canvas.itemconfig(self.language_text, text="French")
-        self.canvas.itemconfig(self.word_text, text=self.chosen_word["French"])
-        self.display_flash_card(DISPLAY_CARD_FRONT_SECONDS)
+        self.canvas.itemconfig(self.language_text, text="All done.")
+        self.canvas.itemconfig(self.word_text, text="Great job!")
+
+    def set_new_flash_card_data(self):
+        if self.words_dict:
+            self.index, self.chosen_word = random.choice(list(self.words_dict.items()))
+            self.canvas.itemconfig(self.card_image, image=self.card_front_image)
+            self.canvas.itemconfig(self.language_text, text="French")
+            self.canvas.itemconfig(self.word_text, text=self.chosen_word["French"])
+            self.display_flash_card(DISPLAY_CARD_FRONT_SECONDS)
+        else:
+            self.display_finished_text()
 
     def user_clicks_button(self, *, button):
         # If the user clicks the 'Check' button. Remove that word from the dictionary
         if button == self.correct_button:
             self.words_dict.pop(self.index)
 
-        self.get_new_card()
+        self.set_new_flash_card_data()
